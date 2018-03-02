@@ -1,0 +1,17 @@
+Package: modeldescribr
+Version: 0.0.0.9000
+Title: Describing and Visualising Statistical Models in R
+Description: This package provides functions that can extract mathematical and visual descriptions of the underlying statistical model of various R model objects. 
+Authors@R: person("First", "Last", , "first.last@example.com", c("aut", "cre"))
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Imports: 
+    lme4,
+    pander
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
