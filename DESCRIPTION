@@ -9,7 +9,8 @@ LazyData: true
 ByteCompile: true
 Imports: 
     lme4,
-    pander
+    pander,
+    glue
 Suggests: 
     knitr,
     rmarkdown,

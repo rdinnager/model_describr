@@ -1,4 +1,5 @@
-modeldescribr.lmerMod <- function(model, fixed_labels, random_labels) {
+#' Function to extract equations representing the underlying model of an `lmerMod` object
+extract_model.lmerMod <- function(model, fixed_labels, random_labels) {
   fixeds <- lme4::nobars(formula(lme4mod))
   fixed_terms <- terms(fixeds)
   
@@ -19,6 +20,8 @@ modeldescribr.lmerMod <- function(model, fixed_labels, random_labels) {
     }
     sub_terms[[i]] <- list(betas = s_terms, group = form_char[3]) 
   }
+  
+  eq <- lapply(beta_interact, function(x) glue::glue("\\beta_{x}", x))
   
   eq_head <- "$$\\begin{aligned}"
   
