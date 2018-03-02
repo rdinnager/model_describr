@@ -77,7 +77,11 @@ Pandoc.convert(text = c('# Demo', 'with a paragraph'))
 data(Orthodont,package="nlme")
 Orthodont$nsex <- as.numeric(Orthodont$Sex=="Male")
 Orthodont$nsexage <- with(Orthodont, nsex*age)
-lme4mod <- lmer(distance ~ age + I(age^2) + (age|Subject) + (0+nsex + I(age^2)|Subject) +
-     (0 + nsexage|Subject) + (1 + age|Sex), data=Orthodont)
+lme4mod <- lmer(distance ~ age*nsex + (age|Subject) + (1|Subject) + (0+nsex|Subject) +
+     (0 + nsexage|Subject) + (1 + age*nsex|Sex), data=Orthodont)
 summary(lme4mod)
+
+fixed <- lme4::nobars(formula(lme4mod))
+termses <- attr(terms(fixed), "term.labels")
+termses
 ```
