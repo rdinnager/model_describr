@@ -20,5 +20,24 @@ modeldescribr.lmerMod <- function(model, fixed_labels, random_labels) {
     sub_terms[[i]] <- list(betas = s_terms, group = form_char[3]) 
   }
   
+  eq_head <- "$$\\begin{aligned}"
+  
+  test <- "\\beta+i\\sim\\text{Normal}\\left(0,\\sigma^2\\right)\\\\\n\\beta^i\\sim\\text{Normal}\\left(0,\\sigma^2\\right)"
+  
+  eq_tail <- "\\end{aligned}$$"
+  
+  Pandoc.convert(text = "$$\\begin{aligned}\n\\beta_i \\sim & \\text{Normal}\\left(0,\\sigma^2\\right)\\\\
+\\gamma_i \\sim & \\text{Normal}\\left(0,\\sigma^2\\right)\n\\end{aligned}$$")
+  
+  f <- paste0(tempfile(), ".tex")
+  con <- file(f, "w", encoding = "UTF-8")
+  cat(paste(eq_head, test, eq_tail, sep = "\n"), file = con)
+  close(con)
+  f.out <- paste0(tempfile(), ".html")
+  system(paste(panderOptions("pandoc.binary"), f, "-f latex -t html -o", f.out))
+  
+  system(paste(panderOptions("pandoc.binary"), f, "-t html -o", f.out))
+  
+  Pandoc.convert(text = paste(eq_head, test, eq_tail, sep = "\n"))
   eq_terms <- list()
 }
