@@ -21,7 +21,7 @@ extract_model.lmerMod <- function(model, fixed_labels, random_labels) {
     sub_terms[[i]] <- list(betas = s_terms, group = form_char[3]) 
   }
   
-  eq <- lapply(betas, function(x) glue::glue("\\beta_{x}"))
+  beta_md <- lapply(betas, function(x) glue::glue("\\beta_{x}"))
 
   
   eq_head <- "$$\\begin{aligned}"
