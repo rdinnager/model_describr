@@ -21,7 +21,36 @@ extract_model.lmerMod <- function(model, fixed_labels, random_labels) {
     sub_terms[[i]] <- list(betas = s_terms, group = form_char[3]) 
   }
   
-  beta_md <- lapply(betas, function(x) glue::glue("\\beta_{x}"))
+  term2eq <- function(term, symbol = "\\beta") {
+    
+    if(term == "intercept"){
+      
+      eq <- "\\alpha"
+      
+    } else {
+    
+      if(grepl("[:]", term)) {
+        two_terms <- strsplit(term, ":", fixed = TRUE)
+        term_1 <- two_terms[[1]][1]
+        term_2 <- two_terms[[1]][2]
+        eq <- glue::glue("{<symbol>}_{\\text{<term>}} x_{\\text{<term_1>}}_i x_{\\text{<term_2>}}_i", .open = "<", .close = ">")
+      } else {
+        eq <- glue::glue("{<symbol>}_{\\text{<term>}} x_{\\text{<term>}}_i", .open = "<", .close = ">")
+      }
+      
+    }
+    eq
+  }
+  
+  beta_md <- sapply(betas, term2eq)
+  beta_eq <- paste(unlist(beta_md), collapse = " + ")
+  
+  lapply(lapply(sub_terms, function(y) y$betas), function(x) sapply(x, term2eq, "\\gamma"))
+  
+  html <- Pandoc.convert(text = paste0("$$", beta_eq, "$$"), open = FALSE, format = "html4")
+  file.rename(html, gsub("html4", "html", html))
+  viewer <- getOption("viewer")
+  viewer(gsub("html4", "html", html))
 
   
   eq_head <- "$$\\begin{aligned}"
